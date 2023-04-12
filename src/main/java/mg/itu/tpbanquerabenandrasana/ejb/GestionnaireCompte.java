@@ -43,4 +43,8 @@ public class GestionnaireCompte {
         TypedQuery<CompteBancaire> query =  em.createNamedQuery("CompteBancaire.findAll", CompteBancaire.class); //em.createNamedQuery("CompteBancaire.findAll");
         return query.getResultList();
     }
+    public int nbComptes(){
+        Query query = em.createQuery("select count(c) from CompteBancaire c");
+        return Integer.valueOf(query.getSingleResult().toString());
+    }
 }
