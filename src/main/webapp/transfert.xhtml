@@ -29,7 +29,7 @@
                     <h:outputLabel value="Somme à transferer : " for="amount" />
                     <h:inputText id="amount" value="#{transfert.amount}" title="amount" />
                     <h:commandButton id="update" value="Transferer" action="#{transfert.transferer}"/>
-                    <h:messages/>
+                    <p:message for="idDebit"/>
                 </h:form>
             </ui:define>
 
