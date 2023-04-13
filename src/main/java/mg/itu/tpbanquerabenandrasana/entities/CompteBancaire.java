@@ -4,6 +4,7 @@
  */
 package mg.itu.tpbanquerabenandrasana.entities;
 
+import jakarta.ejb.EJBException;
 import java.io.Serializable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,7 +19,7 @@ import jakarta.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "CompteBancaire.findAll", query = "SELECT c FROM CompteBancaire c"),
+    @NamedQuery(name = "CompteBancaire.findAll", query = "SELECT c FROM CompteBancaire c")
 })
 public class CompteBancaire implements Serializable {
 
@@ -87,7 +88,7 @@ public class CompteBancaire implements Serializable {
         if (montant < solde) {
             solde -= montant;
         } else {
-            solde = 0;
+            throw new EJBException("Solde insuffisant");
         }
     }
 

@@ -22,8 +22,9 @@ public class ListeComptes implements Serializable {
 
     @EJB
     GestionnaireCompte gc;
-    
+
     private List<CompteBancaire> allComptes;
+
     /**
      * Creates a new instance of ListeComptes
      */
@@ -31,12 +32,10 @@ public class ListeComptes implements Serializable {
     }
 
     public List<CompteBancaire> getAllComptes() {
-        if(allComptes==null){
+        if (allComptes == null) {
             allComptes = gc.getAllComptes();
         }
         return allComptes;
     }
 
-    
-    
 }

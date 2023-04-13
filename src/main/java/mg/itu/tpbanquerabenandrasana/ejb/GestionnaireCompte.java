@@ -5,6 +5,7 @@
 package mg.itu.tpbanquerabenandrasana.ejb;
 
 import jakarta.annotation.sql.DataSourceDefinition;
+import jakarta.ejb.EJBException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -23,7 +24,7 @@ import mg.itu.tpbanquerabenandrasana.entities.CompteBancaire;
         name = "java:app/jdbc/banque",
         serverName = "localhost",
         portNumber = 3306,
-        user = "root", 
+        user = "root",
         password = "root",
         databaseName = "banque",
         properties = {
@@ -32,6 +33,7 @@ import mg.itu.tpbanquerabenandrasana.entities.CompteBancaire;
         }
 )
 public class GestionnaireCompte {
+
     @PersistenceContext(unitName = "banquePU")
     private EntityManager em;
     
@@ -40,11 +42,24 @@ public class GestionnaireCompte {
     }
     
     public List<CompteBancaire> getAllComptes() {
-        TypedQuery<CompteBancaire> query =  em.createNamedQuery("CompteBancaire.findAll", CompteBancaire.class); //em.createNamedQuery("CompteBancaire.findAll");
+        TypedQuery<CompteBancaire> query = em.createNamedQuery("CompteBancaire.findAll", CompteBancaire.class); //em.createNamedQuery("CompteBancaire.findAll");
         return query.getResultList();
     }
-    public int nbComptes(){
+
+    public int nbComptes() {
         Query query = em.createQuery("select count(c) from CompteBancaire c");
         return Integer.valueOf(query.getSingleResult().toString());
+    }
+    
+    public CompteBancaire findById(String id) {
+        return em.find(CompteBancaire.class, Long.valueOf(id));
+    }
+    
+    public void transferer(CompteBancaire debit, CompteBancaire credit, int amount) {
+        if(credit.getId()==debit.getId()) throw new EJBException("Compte de débit et crédit identique");
+        debit = em.merge(debit);
+        credit = em.merge(credit);
+        debit.retirer(amount);
+        credit.deposer(amount);
     }
 }
